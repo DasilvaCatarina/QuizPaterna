@@ -1,0 +1,151 @@
+/* Estilo geral da página */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo do contêiner principal do quiz */
+.quiz-container {
+    width: 80%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+
+h1 {
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.1em;
+    color: #666;
+    line-height: 1.6;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background-color: #a8944c;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #d4c49a;
+    transform: scale(1.05);
+}
+
+/* Efeito quando o botão é clicado */
+button:active {
+    background-color: #a8944c;
+    transform: scale(0.98);
+}
+
+/* Estilo do formulário de e-mail */
+#emailFormContainer {
+    margin-bottom: 30px;
+}
+
+#emailForm input {
+    padding: 12px;
+    width: 70%;
+    margin: 10px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+/* Estilo do botão de envio do formulário de e-mail */
+#emailForm button {
+    width: 80%;
+    padding: 12px;
+    background-color: #a8944c;
+    color: #fff;
+    font-size: 1.1em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#emailForm button:hover {
+    background-color: #d4c49a;
+}
+
+#quiz {
+    display: none;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+/* Animação para o quiz  */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.options button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    background-color: #f2f2f2;
+    color: #333;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1em;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Efeito hover nas opções de resposta */
+.options button:hover {
+    background-color: #a8944c;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Estilo do texto da questão */
+#question-text {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Estilo para o resultado final do quiz */
+#result {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+    margin-top: 30px;
+}
+
+/* Estilo para o visual da roda (se necessário) */
+#wheel {
+    margin: 20px auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ajustes finais para o resultado */
+#result {
+    font-size: 1.2em;
+    margin-top: 20px;
+}

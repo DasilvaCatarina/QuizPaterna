@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="complementos.css">
+    <link rel="stylesheet" href="app.js">
+    <link rel="stylesheet" href="email.html">
+    <title>Quiz Dona Paterna</title>
+</head>
+<body>
+    <img src="/imagens/Logospaterna.png" alt="Logo Dona Paterna" style="width: 200px; margin-bottom: 20px;">
+    
+   
+    <div class="quiz-container" id="emailFormContainer">
+        <h1>Bem-vindo ao Quiz Dona Paterna</h1>
+        <p>Para participar no sorteio da garrafa comemorativa, assinada pelo produtor, deixe o seu e-mail:</p>
+        <form id="emailForm">
+            <input type="email" id="email" required placeholder="Digite seu e-mail">
+            <button type="submit">Iniciar Quiz</button>
+        </form>
+    </div>
+
+    <!-- Quiz (inicialmente oculto) -->
+    <div class="quiz-container" id="quizContainer" style="display: none;">
+        <h1>Quiz Dona Paterna</h1>
+        <p id="question-text"></p>
+        <div id="options"></div>
+        <button id="next-button" style="display: none;">Próxima Pergunta</button>
+        <div id="result" style="display: none;"></div>
+        <img id="wineImage" src="" alt="Imagem do vinho" style="display: none; width: 200px; margin-top: 20px;">
+    </div>
+
+    <script>
+        document.getElementById("emailForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById("email").value;
+            if (email) {
+                localStorage.setItem("userEmail", email); // Armazena localmente para o sorteio
+                document.getElementById("emailFormContainer").style.display = "none";
+                document.getElementById("quizContainer").style.display = "block";
+                showQuestion();
+            }
+        });
+
+        const questions = [
+            { 
+                question: "Como costuma apreciar o seu vinho branco?", 
+                options: [
+                    "Sozinho, ao final do dia para relaxar", 
+                    "À mesa, com uma boa refeição", 
+                    "Em festas e convívios com amigos", 
+                    "Em provas ou momentos especiais"
+                ],
+                scores: ["Descontraído", "Sofisticado", "Festivo", "Tradicional"]
+            },
+            { 
+                question: "O que mais valoriza num vinho branco?", 
+                options: [
+                    "Leveza e frescura", 
+                    "Corpo e complexidade", 
+                    "Aromas frutados e florais", 
+                    "Elegância e persistência"
+                ],
+                scores: ["Descontraído", "Sofisticado", "Festivo", "Tradicional"]
+            },
+            { 
+                question: "Que tipo de gastronomia mais combina consigo?", 
+                options: [
+                    "Aperitivos, mariscos, entradas leves", 
+                    "Fumeiro, carnes brancas, pratos tradicionais", 
+                    "Petiscos, convívios, pratos leves", 
+                    "Pratos clássicos e experiências memoráveis"
+                ],
+                scores: ["Descontraído", "Sofisticado", "Festivo", "Tradicional"]
+            },
+            { 
+                question: "Qual destas frases o representa melhor?", 
+                options: [
+                    "Gosto de novidades, mas valorizo a tradição", 
+                    "Menos é mais – gosto de vinhos simples e bem feitos", 
+                    "Gosto de vinhos que me fazem dizer: uau, não estava à espera disto!", 
+                    "O melhor vinho é aquele que posso partilhar"
+                ],
+                scores: ["Tradicional", "Descontraído", "Sofisticado", "Festivo"]
+            },
+            { 
+                question: "Se o Alvarinho fosse uma pessoa, ele seria:", 
+                options: [
+                    "O amigo descontraído que está sempre pronto para brindar", 
+                    "O anfitrião da festa, que abre o espumante antes mesmo da entrada", 
+                    "Aquele elegante que chega de mansinho, mas marca presença", 
+                    "O sábio da turma, cheio de histórias e tradição"
+                ],
+                scores: ["Descontraído", "Festivo", "Sofisticado", "Tradicional"]
+            }
+        ];
+
+        const wineProfiles = {
+            "Descontraído": {
+                name: "Alvarinho Dona Paterna (Clássico)",
+                description: "Perfil: Descontraído, aprecia leveza e simplicidade, ideal para convívios e consumo informal.",
+                image: "/imagens/DP_A_2022.png"
+            },
+            "Festivo": {
+                name: "Espumante de Alvarinho",
+                description: "Perfil: Festivo, animado, gosta de brindar e criar momentos especiais.",
+                image: "/imagens/DP_Bruto.png"
+            },
+            "Sofisticado": {
+                name: "Alvarinho Reserva",
+                description: "Perfil: Sofisticado, aprecia vinhos com mais corpo e complexidade.",
+                image: "/imagens/DP_A_Reserva.png"
+            },
+            "Tradicional": {
+                name: "30º Aniversário",
+                description: "Perfil: Tradicional e exigente, valoriza história e exclusividade.",
+                image: "/imagens/DP_30_aniversario.png"
+            }
+        };
+
+        let currentQuestion = 0;
+        let selectedAnswers = [];
+
+        function showQuestion() {
+            if (currentQuestion < questions.length) {
+                const question = questions[currentQuestion];
+                document.getElementById("question-text").textContent = question.question;
+                const optionsDiv = document.getElementById("options");
+                optionsDiv.innerHTML = "";
+
+                question.options.forEach((option, index) => {
+                    const button = document.createElement("button");
+                    button.textContent = option;
+                    button.onclick = () => selectAnswer(question.scores[index]);
+                    optionsDiv.appendChild(button);
+                });
+
+                document.getElementById("next-button").style.display = "none";
+            } else {
+                showResult();
+            }
+        }
+
+        function selectAnswer(score) {
+            selectedAnswers.push(score);
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showResult() {
+            let counts = {};
+            selectedAnswers.forEach(score => counts[score] = (counts[score] || 0) + 1);
+            let mostSelected = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+
+            let wineProfile = wineProfiles[mostSelected];
+            document.getElementById("quizContainer").innerHTML = `
+                <h1>O seu vinho ideal é:</h1>
+                <h2>${wineProfile.name}</h2>
+                <p>${wineProfile.description}</p>
+                <img src="${wineProfile.image}" alt="Imagem do vinho" style="width: 200px; margin-top: 20px;">
+            `;
+        }
+
+        document.getElementById("emailForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    if (email) {
+        try {
+            await fetch("http://localhost:3001/save-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            document.getElementById("emailFormContainer").style.display = "none";
+            document.getElementById("quizContainer").style.display = "block";
+            showQuestion();
+        } catch (error) {
+            console.error("Erro ao salvar o e-mail:", error);
+        }
+    }
+});
+    </script>
+</body>
+</html>
